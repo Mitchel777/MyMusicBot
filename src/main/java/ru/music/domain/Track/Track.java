@@ -2,9 +2,10 @@ package ru.music.domain.Track;
 
 public class Track implements ITrack
 {
-    private String title;  // Название
+    private String title;
     private String artist;
-    private String LinkSong;// Исполнитель
+    private String LinkSong;
+    private String TrackId;
 
     public Track() {}
 
@@ -28,6 +29,10 @@ public class Track implements ITrack
     public  String getLinkSong()
     {
         return LinkSong;
+    }
+    public String getTrackId()
+    {
+        return TrackId;
     }
 }
 

@@ -3,23 +3,22 @@ package ru.music.domain.Playlist;
 
 public class Playlist implements IPlaylist
 {
-    private String userId;
+    private String UserId;
     private String name;  // Название
-    private String id;  // Кто создал плейлист
-    private String user; // У каждого плейлиста свои пользователь
+    private String PlaylistId;  //
 
     public Playlist() {}
 
-    public  Playlist(String userId, String name, String id)
+    public  Playlist(String UserId, String name, String PlaylistId)
     {
-        this.userId = userId;
+        this.UserId = UserId;
         this.name = name;
-        this.id = id;
+        this.PlaylistId = PlaylistId;
     }
 
     public String getUserId()
         {
-        return userId;
+        return UserId;
         }
 
     public String  getName()
@@ -28,13 +27,8 @@ public class Playlist implements IPlaylist
             return name;
         }
 
-    public String  getId()
+    public String getPlaylistId()
         {
-            return id;
-        }
-
-    public  String getUser()
-        {
-            return user;
+            return PlaylistId;
         }
 }

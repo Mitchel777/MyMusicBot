@@ -2,17 +2,17 @@ package ru.music.domain.User;
 
 public class User implements IUser
 {
-    private String id;
+    private String UserId;
 
     public User() {}
 
-    public  User(String id)
+    public  User(String UserId)
     {
-        this.id = id;
+        this.UserId = UserId;
     }
-    public String getId()
+    public String getUserId()
     {
-        return id;
+        return UserId;
     }
 
 }
