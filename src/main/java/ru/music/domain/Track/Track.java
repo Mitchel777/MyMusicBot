@@ -2,18 +2,14 @@ package ru.music.domain.Track;
 
 public class Track implements ITrack
 {
-    private String title;
-    private String artist;
-    private String LinkSong;
+    private final String title;
+    private final String artist;
     private String TrackId;
 
-    public Track() {}
-
-    public  Track(String title, String artist, String LinkSong)
+    public  Track(String title, String artist)
     {
         this.title = title;
         this.artist = artist;
-        this.LinkSong = LinkSong;
     }
 
     public  String getTitle()
@@ -26,10 +22,6 @@ public class Track implements ITrack
         return artist;
     }
 
-    public  String getLinkSong()
-    {
-        return LinkSong;
-    }
     public String getTrackId()
     {
         return TrackId;
