@@ -1,7 +1,0 @@
-package ru.music.domain.user;
-
-public interface IUser {
-    public String getUserID();
-    public String getName();
-
-}
