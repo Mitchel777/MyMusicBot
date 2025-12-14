@@ -1,15 +1,16 @@
-package ru.music.domain.Track;
+package ru.music.domain.track;
 
 public class Track implements ITrack
 {
     private final String title;
     private final String artist;
-    private String TrackId;
+    private String trackId;
 
-    public  Track(String title, String artist)
+    public Track(String title, String artist, String trackID)
     {
         this.title = title;
         this.artist = artist;
+        this.trackId = trackID;
     }
 
     public  String getTitle()
