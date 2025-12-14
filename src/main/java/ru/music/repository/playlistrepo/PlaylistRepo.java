@@ -1,7 +1,6 @@
 package ru.music.repository.playlistrepo;
 
-import ru.music.domain.playlist.IPlaylist;
-
+import ru.music.domain.Playlist.IPlaylist;
 
 import java.util.*;
 
