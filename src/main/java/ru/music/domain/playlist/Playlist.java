@@ -19,7 +19,7 @@ public class Playlist implements IPlaylist
 
     public String getName()
     {
-        return getName();
+        return name;
     }
     public String getUserId()
     {

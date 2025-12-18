@@ -16,7 +16,7 @@ public class PlaylistRepo implements IPlaylistRepo
     private IDGenerator idGenerator;
 
 
-    public PlaylistRepo(String UserID)
+    public PlaylistRepo()
     {
         playlistsDB = new ArrayList<IPlaylist>();
         playlistToTrackDB = new HashMap<IPlaylist, List<ITrack>>();
@@ -32,7 +32,7 @@ public class PlaylistRepo implements IPlaylistRepo
     {
         if (isPlaylistInPlaylistsDB(nameOfPlaylist) == null)
         {
-            Playlist newPlaylist = new Playlist(idGenerator.generateIDToPlaylist(), nameOfPlaylist, userID);
+            Playlist newPlaylist = new Playlist(idGenerator.generateID(), nameOfPlaylist, userID);
             playlistsDB.add(newPlaylist);
             playlistToTrackDB.putIfAbsent(newPlaylist, new ArrayList<ITrack>());
         }
