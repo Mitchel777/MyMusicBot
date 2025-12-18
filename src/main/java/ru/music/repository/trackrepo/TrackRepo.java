@@ -52,7 +52,7 @@ public class TrackRepo implements ITrackRepo
         }
         if (allTracks == null)
         {
-            System.out.println("Трул не найден");
+            System.out.println("Трек не найден");
         }
         List<ITrack> tracks = playlistToTrackDB.get(playlistName);
         if (tracks == null) {
@@ -66,11 +66,9 @@ public class TrackRepo implements ITrackRepo
             }
         }
 
-        // 4. Добавляем трек
         tracks.add(foundTrack);
-        System.out.println("Трек '" + trackName + "' добавлен в плейлист '" + playlistName + "'");
+        System.out.println("Трек " + trackName + " добавлен в плейлист " + playlistName);
     }
-
 
     public void removeTrack(String playlistName, String trackName) {
         List<ITrack> tracks = playlistToTrackDB.get(playlistName);
@@ -84,7 +82,7 @@ public class TrackRepo implements ITrackRepo
             ITrack track = iterator.next();
             if (track.getTitle().equals(trackName)) {
                 iterator.remove();
-                System.out.println("Трек '" + trackName + "' удален из плейлиста '" + playlistName + "'");
+                System.out.println("Трек " + trackName + " удален из плейлиста " + playlistName);
                 return;
             }
         }

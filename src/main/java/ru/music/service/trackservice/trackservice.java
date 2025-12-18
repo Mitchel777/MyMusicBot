@@ -17,14 +17,12 @@ public class trackservice
     {
         trackRepo.addTrack(playlistName, trackName);
 
-        System.out.println("Трек Добавлен в плейлист");
     }
 
     public void removeTrackFromPlaylist(String playlistName, String trackName)
     {
         trackRepo.removeTrack(playlistName, trackName);
 
-        System.out.println("Трек удален из плейлиста");
     }
 
     public List<ITrack> getPlaylistTracks(String playlistId)
@@ -33,7 +31,6 @@ public class trackservice
     }
 
     public void showAllTracksFromFile() {
-        System.out.println("Все треки из файла: ");
 
         List<ITrack> tracks = trackRepo.loadAllTracks();
 
