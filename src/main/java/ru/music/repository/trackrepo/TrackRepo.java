@@ -11,10 +11,11 @@ public class TrackRepo implements ITrackRepo
 {
     private HashMap<IPlaylist, List<ITrack>> playlistToTrackDB;
 
-    public TrackRepo()
+    public TrackRepo(HashMap<IPlaylist, List<ITrack>> playlistToTrackDB)
     {
-        playlistToTrackDB = new HashMap<>();
+        this.playlistToTrackDB = playlistToTrackDB;
     }
+
 
     public List<ITrack> getTracksByPlaylistId(String playlistId)
     {

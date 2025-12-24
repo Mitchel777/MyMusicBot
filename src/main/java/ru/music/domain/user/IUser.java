@@ -1,4 +1,4 @@
-package ru.music.domain.User;
+package ru.music.domain.user;
 
 public interface IUser
 {
