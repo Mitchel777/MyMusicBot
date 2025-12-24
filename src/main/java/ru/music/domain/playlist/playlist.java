@@ -1,12 +1,12 @@
-package ru.music.domain.Playlist;
+package ru.music.domain.playlist;
 
-public class Playlist implements IPlaylist
+public class playlist implements IPlaylist
 {
     private final String playlistID;
     private final String name;
     private final String userID;
 
-    public Playlist(String playlistID, String name, String userID)
+    public playlist(String playlistID, String name, String userID)
     {
         this.playlistID = playlistID;
         this.name = name;
@@ -18,13 +18,9 @@ public class Playlist implements IPlaylist
     }
 
     @Override
-    public String name() {
-        return "";
-    }
-
     public String getName()
     {
-        return name();
+        return getName();
     }
     public String getUserId()
     {

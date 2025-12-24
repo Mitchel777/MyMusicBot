@@ -1,9 +1,9 @@
-package ru.music.domain.Playlist;
+package ru.music.domain.playlist;
 
 public interface IPlaylist
 {
     public String getPlaylistId();
-    public String name();
+    public String getName();
     public String getUserId();
 
 }
