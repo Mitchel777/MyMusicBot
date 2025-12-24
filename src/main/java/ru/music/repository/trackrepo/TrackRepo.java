@@ -1,7 +1,7 @@
 package ru.music.repository.trackrepo;
 
-import ru.music.domain.Track.ITrack;
-import ru.music.domain.Track.Track;
+import ru.music.domain.track.ITrack;
+import ru.music.domain.track.Track;
 
 import java.util.Iterator;
 import java.nio.file.Files;

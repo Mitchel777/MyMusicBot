@@ -1,4 +1,4 @@
-package ru.music.domain.Track;
+package ru.music.domain.track;
 
 public class Track implements ITrack
 {

@@ -1,6 +1,6 @@
 package ru.music.service.trackservice;
 
-import ru.music.domain.Track.ITrack;
+import ru.music.domain.track.ITrack;
 import ru.music.repository.trackrepo.TrackRepo;
 
 import java.util.*;

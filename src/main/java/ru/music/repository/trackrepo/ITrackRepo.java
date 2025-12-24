@@ -1,6 +1,6 @@
 package ru.music.repository.trackrepo;
 
-import ru.music.domain.Track.ITrack;
+import ru.music.domain.track.ITrack;
 
 import java.util.List;
 
