@@ -48,7 +48,7 @@ public class PlaylistRepo implements IPlaylistRepo
 
         for (IPlaylist playlist : playlistsDB)
         {
-            if (playlist.getName() == nameOfPlaylist)
+            if (playlist.getName().equalsIgnoreCase(nameOfPlaylist))
             {
                 return playlist;
             }
@@ -80,7 +80,7 @@ public class PlaylistRepo implements IPlaylistRepo
 
         for (IPlaylist playlist : playlistsDB)
         {
-            if (playlist.getUserId() == userID)
+            if (playlist.getUserId().equals(userID))
             {
                 playlists.add(playlist);
             }
