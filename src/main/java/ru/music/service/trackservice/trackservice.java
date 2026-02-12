@@ -46,4 +46,11 @@ public class trackservice
                     track.getArtist());
         }
     }
+
+    public void addTrack(String playlistName, String trackName)
+    {
+        trackRepo.addTrack(playlistName, trackName);
+    }
+
+
 }
