@@ -1,26 +1,35 @@
 package ru.music.app;
 
 import ru.music.domain.track.ITrack;
+import ru.music.repository.playlistrepo.PlaylistRepo;
 import ru.music.repository.trackrepo.TrackRepo;
-import ru.music.service.trackservice.trackservice;
+import ru.music.service.playlistservice.PlaylistService;
+import ru.music.service.trackservice.TrackService;
 
 import java.util.Scanner;
 
 public class App {
 
-    private final trackservice TrackService;
+    private final TrackService trackService;
+    private final PlaylistService playlistService;
     private final Scanner scanner;
     private boolean isRunning;
 
     public App() {
         TrackRepo trackRepo = new TrackRepo();
-        this.TrackService = new trackservice(trackRepo);
+        PlaylistRepo playlistRepo = new PlaylistRepo();
+
+        this.trackService = new TrackService(trackRepo);
+        this.playlistService = new PlaylistService(playlistRepo);
+
         this.scanner = new Scanner(System.in);
         this.isRunning = true;
+
+        start();
     }
 
     public void start() {
-        printWelcomeMessage();
+        showStartMenu();
 
         while (isRunning) {
             System.out.print("\nВведите команду: ");
@@ -55,12 +64,24 @@ public class App {
                 showAllTracks();
                 break;
 
-            case "/add":
+            case "/addtrack":
                 addTrack(args);
                 break;
 
-            case "/remove":
+            case "/removetrack":
                 removeTrack(args);
+                break;
+
+            case "/createplaylist":
+                createPlaylist(args);
+                break;
+
+            case "/playlist":
+                showAllPlaylists();
+                break;
+
+            case "/removeplaylist":
+                removePlaylist(args);
                 break;
 
             case "/help":
@@ -81,15 +102,18 @@ public class App {
         System.out.println(" Добро пожаловать в Music App!");
         System.out.println(" Команды (как в Telegram боте):");
         System.out.println("   /tracks - показать все треки");
-        System.out.println("   /add [плейлист] [трек] - добавить трек");
-        System.out.println("   /remove [плейлист] [трек] - удалить трек");
+        System.out.println("   /addtrack [плейлист] [трек] - добавить трек");
+        System.out.println("   /removetrack [плейлист] [трек] - удалить трек");
+        System.out.println("   /createplaylist [плейлист] - создать новый плейлист");
+        System.out.println("   /playlist [плейлист] - показать все плейлисты");
+        System.out.println("   /removeplaylist [плейлист] - удалить плейлист");
         System.out.println("   /help - помощь");
         System.out.println("   /exit - выход");
     }
 
     private void showAllTracks() {
         System.out.println(" Загружаю треки из файла...");
-        TrackService.showAllTracksFromFile();
+        trackService.showAllTracksFromFile();
     }
 
 
@@ -105,14 +129,14 @@ public class App {
         String playlistName = params[0];
         String trackName = params[1];
 
-        TrackService.addTrackToPlaylist(playlistName, trackName);
+        trackService.addTrackToPlaylist(playlistName, trackName);
     }
 
     private void removeTrack(String args) {
         String[] params = args.split(" ", 2);
 
         if (params.length < 2) {
-            System.out.println(" Используйте: /remove [плейлист] [название трека]");
+            System.out.println(" Используйте: /removetrack [плейлист] [название трека]");
             System.out.println("   Пример: /remove Рок-хиты Hotel California");
             return;
         }
@@ -120,27 +144,66 @@ public class App {
         String playlistName = params[0];
         String trackName = params[1];
 
-        TrackService.removeTrackFromPlaylist(playlistName, trackName);
+        trackService.removeTrackFromPlaylist(playlistName, trackName);
+    }
+
+    private void createPlaylist(String args)
+    {
+        String[] params = args.split(" ", 1);
+
+        if (params.length < 1) {
+            System.out.println(" Используйте: /createplaylist [плейлист]");
+            System.out.println("   Пример: /createplaylist Рок-хиты");
+            return;
+        }
+
+        String playlistName = params[0];
+
+        playlistService.createPlaylist(playlistName, "111");
+    }
+
+    private void showAllPlaylists()
+    {
+        playlistService.getPlaylistsByUserID("111");
+    }
+
+    private void removePlaylist(String args)
+    {
+        String[] params = args.split(" ", 1);
+
+        if (params.length < 1) {
+            System.out.println(" Используйте: /removeplaylist [плейлист]");
+            System.out.println("   Пример: /removeplaylist Рок-хиты");
+            return;
+        }
+
+        String playlistName = params[0];
+
+        playlistService.removePlaylist(playlistName, "111");
     }
 
     private void showHelp() {
         System.out.println(" Помощь по командам:");
         System.out.println("/start - начать работу");
         System.out.println("/tracks - показать все треки из файла");
-        System.out.println("/add [плейлист] [трек] - добавить трек в плейлист");
+        System.out.println("/addtrack [плейлист] [трек] - добавить трек в плейлист");
         System.out.println("   Пример: /add 'Рок-хиты' 'Bohemian Rhapsody'");
-        System.out.println("/remove [плейлист] [трек] - удалить трек из плейлиста");
-        System.out.println("/playlist [плейлист] - показать треки в плейлисте");
+        System.out.println("/removetrack [плейлист] [трек] - удалить трек из плейлиста");
+        System.out.println("/createplaylist [плейлист] - создать новый плейлист");
+        System.out.println("/playlist [плейлист] - показать все плейлисты");
+        System.out.println("/removeplaylist [плейлист] - удалить плейлист");
         System.out.println("/search [текст] - поиск треков");
         System.out.println("/help - эта справка");
         System.out.println("/exit - выход");
     }
 
+    /*
     private void printWelcomeMessage() {
         System.out.println("       MUSIC APP (Консольная версия)");
         System.out.println("   Эмуляция Telegram бота в консоли");
         System.out.println("\nНачните с команды /start");
     }
+    */
 
     public static void main(String[] args) {
         App app = new App();
