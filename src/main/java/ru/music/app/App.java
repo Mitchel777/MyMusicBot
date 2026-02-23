@@ -17,6 +17,7 @@ public class App {
         this.TrackService = new trackservice(trackRepo);
         this.scanner = new Scanner(System.in);
         this.isRunning = true;
+        start();
     }
 
     public void start() {
@@ -79,7 +80,6 @@ public class App {
 
     private void showStartMenu() {
         System.out.println(" Добро пожаловать в Music App!");
-        System.out.println(" Команды (как в Telegram боте):");
         System.out.println("   /tracks - показать все треки");
         System.out.println("   /add [плейлист] [трек] - добавить трек");
         System.out.println("   /remove [плейлист] [трек] - удалить трек");
@@ -130,16 +130,12 @@ public class App {
         System.out.println("/add [плейлист] [трек] - добавить трек в плейлист");
         System.out.println("   Пример: /add 'Рок-хиты' 'Bohemian Rhapsody'");
         System.out.println("/remove [плейлист] [трек] - удалить трек из плейлиста");
-        System.out.println("/playlist [плейлист] - показать треки в плейлисте");
-        System.out.println("/search [текст] - поиск треков");
         System.out.println("/help - эта справка");
         System.out.println("/exit - выход");
     }
 
     private void printWelcomeMessage() {
-        System.out.println("       MUSIC APP (Консольная версия)");
-        System.out.println("   Эмуляция Telegram бота в консоли");
-        System.out.println("\nНачните с команды /start");
+        System.out.println("Начните с команды /start");
     }
 
     public static void main(String[] args) {
