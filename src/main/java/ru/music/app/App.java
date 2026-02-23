@@ -80,7 +80,6 @@ public class App {
 
     private void showStartMenu() {
         System.out.println(" Добро пожаловать в Music App!");
-        System.out.println(" Команды (как в Telegram боте):");
         System.out.println("   /tracks - показать все треки");
         System.out.println("   /add [плейлист] [трек] - добавить трек");
         System.out.println("   /remove [плейлист] [трек] - удалить трек");
