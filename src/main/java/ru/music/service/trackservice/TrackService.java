@@ -5,11 +5,11 @@ import ru.music.repository.trackrepo.TrackRepo;
 
 import java.util.*;
 
-public class trackservice
+public class TrackService
 {
-    private final  TrackRepo trackRepo;
+    private final TrackRepo trackRepo;
 
-    public trackservice(TrackRepo trackRepo) {
+    public TrackService(TrackRepo trackRepo) {
         this.trackRepo = trackRepo;
     }
 
