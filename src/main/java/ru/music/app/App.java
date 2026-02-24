@@ -100,7 +100,6 @@ public class App {
 
     private void showStartMenu() {
         System.out.println(" Добро пожаловать в Music App!");
-        System.out.println(" Команды (как в Telegram боте):");
         System.out.println("   /tracks - показать все треки");
         System.out.println("   /addtrack [плейлист] [трек] - добавить трек");
         System.out.println("   /removetrack [плейлист] [трек] - удалить трек");
@@ -187,7 +186,7 @@ public class App {
         System.out.println("/start - начать работу");
         System.out.println("/tracks - показать все треки из файла");
         System.out.println("/addtrack [плейлист] [трек] - добавить трек в плейлист");
-        System.out.println("   Пример: /add 'Рок-хиты' 'Bohemian Rhapsody'");
+        System.out.println("   Пример: /addtrack 'Рок-хиты' 'Bohemian Rhapsody'");
         System.out.println("/removetrack [плейлист] [трек] - удалить трек из плейлиста");
         System.out.println("/createplaylist [плейлист] - создать новый плейлист");
         System.out.println("/playlist [плейлист] - показать все плейлисты");
@@ -197,13 +196,6 @@ public class App {
         System.out.println("/exit - выход");
     }
 
-    /*
-    private void printWelcomeMessage() {
-        System.out.println("       MUSIC APP (Консольная версия)");
-        System.out.println("   Эмуляция Telegram бота в консоли");
-        System.out.println("\nНачните с команды /start");
-    }
-    */
 
     public static void main(String[] args) {
         App app = new App();

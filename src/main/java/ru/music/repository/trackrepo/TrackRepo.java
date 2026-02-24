@@ -14,7 +14,7 @@ import java.util.*;
 
 public class TrackRepo implements ITrackRepo
 {
-    private static final String TrackFile = "repository/music.txt";
+    private static final String TrackFile = "src/main/java/ru/music/repository/music.txt";
 
     private final HashMap<String, List<ITrack>> playlistToTrackDB;
 
@@ -45,7 +45,6 @@ public class TrackRepo implements ITrackRepo
         List<ITrack> allTracks = loadAllTracks();
         ITrack foundTrack = null;
 
-        // Ищем трек по названию
         for (ITrack track : allTracks) {
             if (track.getTitle().equalsIgnoreCase(trackName)) {
                 foundTrack = track;
@@ -53,19 +52,16 @@ public class TrackRepo implements ITrackRepo
             }
         }
 
-        // Если трек не найден
         if (foundTrack == null) {
             System.out.println("Трек '" + trackName + "' не найден в базе");
             return;
         }
 
-        // Получаем или создаём плейлист
         List<ITrack> playlist = playlistToTrackDB.computeIfAbsent(
                 playlistName,
                 k -> new ArrayList<>()
         );
 
-        // Проверяем дубликаты
         for (ITrack existingTrack : playlist) {
             if (existingTrack.getTitle().equalsIgnoreCase(trackName)) {
                 System.out.println("Трек уже есть в плейлисте");
@@ -73,7 +69,6 @@ public class TrackRepo implements ITrackRepo
             }
         }
 
-        // Добавляем трек
         playlist.add(foundTrack);
         System.out.println("Трек '" + trackName + "' добавлен в плейлист '" + playlistName + "'");
     }
@@ -131,6 +126,7 @@ public class TrackRepo implements ITrackRepo
 
         return tracks;
     }
+
 
 }
 
