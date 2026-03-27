@@ -16,27 +16,24 @@ public class TrackService
     public void addTrackToPlaylist(String playlistName, String trackName)
     {
         trackRepo.addTrack(playlistName, trackName);
-
     }
 
     public void removeTrackFromPlaylist(String playlistName, String trackName)
     {
         trackRepo.removeTrack(playlistName, trackName);
-
     }
 
-    public List<ITrack> getPlaylistTracks(String playlistId)
+    public List<ITrack> getPlaylistTracks(String playlistName)
     {
-        return trackRepo.getTracksByPlaylistId(playlistId);
+        return trackRepo.getTracksByPlaylistName(playlistName);
     }
 
-    public void showAllTracksFromFile() {
-
+    public List<ITrack> showAllTracksFromFile() {
         List<ITrack> tracks = trackRepo.loadAllTracks();
 
         if (tracks.isEmpty()) {
             System.out.println("Нет треков");
-            return;
+            return tracks;
         }
 
         for (ITrack track : tracks)
@@ -45,12 +42,6 @@ public class TrackService
                     track.getTitle() + " - " +
                     track.getArtist());
         }
+        return tracks;
     }
-
-    public void addTrack(String playlistName, String trackName)
-    {
-        trackRepo.addTrack(playlistName, trackName);
-    }
-
-
 }

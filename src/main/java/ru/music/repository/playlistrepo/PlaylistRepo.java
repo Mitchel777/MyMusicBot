@@ -2,29 +2,25 @@ package ru.music.repository.playlistrepo;
 
 import ru.music.domain.playlist.IPlaylist;
 import ru.music.domain.playlist.Playlist;
-import ru.music.domain.track.ITrack;
 import ru.music.idgenerator.IDGenerator;
+import ru.music.repository.trackrepo.TrackRepo;
 
 import java.util.*;
 
 public class PlaylistRepo implements IPlaylistRepo
 {
-
     private List<IPlaylist> playlistsDB;
-    private Map<IPlaylist, List<ITrack>> playlistToTrackDB;
     private IDGenerator idGenerator;
-
+    private TrackRepo trackRepo;
 
     public PlaylistRepo()
     {
-        playlistsDB = new ArrayList<IPlaylist>();
-        playlistToTrackDB = new HashMap<IPlaylist, List<ITrack>>();
+        playlistsDB = new ArrayList<>();
         idGenerator = new IDGenerator();
     }
 
-    public Map<IPlaylist, List<ITrack>> getPlaylistToTrackDB()
-    {
-        return playlistToTrackDB;
+    public void setTrackRepo(TrackRepo trackRepo) {
+        this.trackRepo = trackRepo;
     }
 
     public void addPlaylist(String nameOfPlaylist, String userID)
@@ -33,9 +29,13 @@ public class PlaylistRepo implements IPlaylistRepo
         {
             Playlist newPlaylist = new Playlist(idGenerator.generateID(), nameOfPlaylist, userID);
             playlistsDB.add(newPlaylist);
-            playlistToTrackDB.putIfAbsent(newPlaylist, new ArrayList<ITrack>());
-        }
 
+            if (trackRepo != null) {
+                trackRepo.createPlaylistInTrackRepo(nameOfPlaylist);
+            }
+
+            System.out.println("Плейлист '" + nameOfPlaylist + "' успешно добавлен");
+        }
         else
         {
             System.out.println("Плейлист с данным названием уже существует");
@@ -44,7 +44,6 @@ public class PlaylistRepo implements IPlaylistRepo
 
     public IPlaylist isPlaylistInPlaylistsDB(String nameOfPlaylist)
     {
-
         for (IPlaylist playlist : playlistsDB)
         {
             if (playlist.getName().equalsIgnoreCase(nameOfPlaylist))
@@ -52,10 +51,8 @@ public class PlaylistRepo implements IPlaylistRepo
                 return playlist;
             }
         }
-
         return null;
     }
-
 
     public void removePlaylist(String nameOfPlaylist)
     {
@@ -64,29 +61,27 @@ public class PlaylistRepo implements IPlaylistRepo
         {
             System.out.println("Такого плейлиста не существует");
         }
-
         else
         {
             playlistsDB.remove(currentPlaylist);
+
+            if (trackRepo != null) {
+                trackRepo.removePlaylistFromTrackRepo(nameOfPlaylist);
+            }
+
+            System.out.println("Плейлист '" + nameOfPlaylist + "' удален");
         }
     }
 
-
-
     public List<IPlaylist> getAllPlaylistsByUser(String userID)
     {
-        List<IPlaylist> playlists = new ArrayList<IPlaylist>();
-
+        List<IPlaylist> playlists = new ArrayList<>();
         for (IPlaylist playlist : playlistsDB)
         {
             if (playlist.getUserId().equals(userID))
             {
                 playlists.add(playlist);
             }
-        }
-        if (playlists.isEmpty())
-        {
-            System.out.println("У пользователя нет плейлистов с треками");
         }
         return playlists;
     }
