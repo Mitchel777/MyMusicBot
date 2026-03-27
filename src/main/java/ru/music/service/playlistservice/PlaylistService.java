@@ -11,7 +11,7 @@ public class PlaylistService {
     private final PlaylistRepo playlistRepo;
     private final TrackRepo trackRepo;
 
-    PlaylistService(PlaylistRepo playlistRepo, TrackRepo trackRepo)
+    public PlaylistService(PlaylistRepo playlistRepo, TrackRepo trackRepo)
     {
         this.playlistRepo = playlistRepo;
         this.trackRepo = trackRepo;
@@ -31,5 +31,4 @@ public class PlaylistService {
     {
         playlistRepo.removePlaylist(nameOfPlaylist);
     }
-
 }

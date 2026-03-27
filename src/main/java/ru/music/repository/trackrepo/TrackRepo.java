@@ -16,32 +16,32 @@ public class TrackRepo implements ITrackRepo
 {
     private static final String TrackFile = "src/main/java/ru/music/repository/music.txt";
 
-    private final HashMap<String, List<ITrack>> playlistToTrackDB;
+    private final HashMap<String, List<ITrack>> playlistToTrackDB; // ключ - НАЗВАНИЕ плейлиста
 
     public TrackRepo() {
-        playlistToTrackDB = new HashMap<String, List<ITrack>>();
+        playlistToTrackDB = new HashMap<>();
     }
 
     public List<ITrack> getTracksByPlaylistId(String playlistId) {
-        List<ITrack> tracks = new ArrayList<>();
+        return new ArrayList<>();
+    }
 
-        if (playlistToTrackDB.containsKey(playlistId)) {
-            for (ITrack track : playlistToTrackDB.get(playlistId)) {
-                tracks.add(track);
-            }
+    public List<ITrack> getTracksByPlaylistName(String playlistName) {
+        List<ITrack> tracks = playlistToTrackDB.get(playlistName);
 
-            if (tracks.isEmpty()) {
-                System.out.println("В данном плейлисте нет треков");
-            }
-        } else {
+        if (tracks == null) {
             System.out.println("Данного плейлиста не существует");
+            return new ArrayList<>();
+        }
+
+        if (tracks.isEmpty()) {
+            System.out.println("В данном плейлисте нет треков");
         }
 
         return tracks;
     }
 
     public void addTrack(String playlistName, String trackName) {
-        // Загружаем все треки из файла
         List<ITrack> allTracks = loadAllTracks();
         ITrack foundTrack = null;
 
@@ -83,9 +83,9 @@ public class TrackRepo implements ITrackRepo
         Iterator<ITrack> iterator = tracks.iterator();
         while (iterator.hasNext()) {
             ITrack track = iterator.next();
-            if (track.getTitle().equals(trackName)) {
+            if (track.getTitle().equalsIgnoreCase(trackName)) {
                 iterator.remove();
-                System.out.println("Трек " + trackName + " удален из плейлиста " + playlistName);
+                System.out.println("Трек '" + trackName + "' удален из плейлиста '" + playlistName + "'");
                 return;
             }
         }
@@ -127,8 +127,11 @@ public class TrackRepo implements ITrackRepo
         return tracks;
     }
 
+    public void createPlaylistInTrackRepo(String playlistName) {
+        playlistToTrackDB.putIfAbsent(playlistName, new ArrayList<>());
+    }
 
+    public void removePlaylistFromTrackRepo(String playlistName) {
+        playlistToTrackDB.remove(playlistName);
+    }
 }
-
-
-
