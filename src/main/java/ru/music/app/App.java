@@ -9,7 +9,7 @@ import ru.music.domain.track.ITrack;
 import ru.music.repository.playlistrepo.PlaylistRepo;
 import ru.music.repository.trackrepo.TrackRepo;
 import ru.music.service.playlistservice.PlaylistService;
-import ru.music.service.trackservice.trackservice;
+import ru.music.service.trackservice.TrackService;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class App extends TelegramLongPollingBot {
 
     private final String botToken;
     private final String botUsername;
-    private final trackservice trackService;
+    private final TrackService trackService;
     private final PlaylistService playlistService;
     private final PlaylistRepo playlistRepo;
 
@@ -29,7 +29,7 @@ public class App extends TelegramLongPollingBot {
         this.playlistRepo = new PlaylistRepo();
         this.playlistRepo.setTrackRepo(trackRepo);
 
-        this.trackService = new trackservice(trackRepo);
+        this.trackService = new TrackService(trackRepo);
         this.playlistService = new PlaylistService(playlistRepo, trackRepo);
     }
 
