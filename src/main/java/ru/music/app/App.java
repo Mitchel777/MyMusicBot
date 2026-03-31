@@ -114,6 +114,10 @@ public class App extends TelegramLongPollingBot {
                 }
                 break;
 
+            case "/search":
+                searchByArtist(chatId, args);
+                break;
+
             case "/help":
                 sendMessage(chatId, getHelpMessage());
                 break;
@@ -177,9 +181,16 @@ public class App extends TelegramLongPollingBot {
     }
 
     private void showPlaylistTracks(long chatId, String playlistName, String userId) {
+        System.out.println("🔍 showPlaylistTracks вызван: " + playlistName);
+
         List<IPlaylist> playlists = playlistService.getPlaylistByUserID(userId);
-        boolean exists = playlists.stream()
-                .anyMatch(p -> p.getName().equalsIgnoreCase(playlistName));
+        boolean exists = false;
+        for (IPlaylist playlist : playlists) {
+            if (playlist.getName().equalsIgnoreCase(playlistName)) {
+                exists = true;
+                break;
+            }
+        }
 
         if (!exists) {
             sendMessage(chatId, "❌ Плейлист *" + playlistName + "* не найден");
@@ -187,6 +198,7 @@ public class App extends TelegramLongPollingBot {
         }
 
         List<ITrack> tracks = trackService.getPlaylistTracks(playlistName);
+        System.out.println("🔍 Получено треков: " + tracks.size());
 
         if (tracks.isEmpty()) {
             sendMessage(chatId, "📭 В плейлисте *" + playlistName + "* пока нет треков");
@@ -206,18 +218,15 @@ public class App extends TelegramLongPollingBot {
         String[] params = args.split(" ", 2);
 
         if (params.length < 2) {
-            sendMessage(chatId, "❌ Неверный формат. Используйте: /add [плейлист] [трек]");
+            sendMessage(chatId, "❌ Используйте: /add [плейлист] [название трека]\n" +
+                    "Пример: /add Мои любимые Bohemian Rhapsody");
             return;
         }
 
         String playlistName = params[0];
         String trackName = params[1];
 
-        List<IPlaylist> playlists = playlistService.getPlaylistByUserID(userId);
-        boolean exists = playlists.stream()
-                .anyMatch(p -> p.getName().equalsIgnoreCase(playlistName));
-
-        if (!exists) {
+        if (!playlistRepo.playlistExists(playlistName)) {
             sendMessage(chatId, "❌ Плейлист *" + playlistName + "* не существует");
             return;
         }
@@ -230,19 +239,31 @@ public class App extends TelegramLongPollingBot {
         String[] params = args.split(" ", 2);
 
         if (params.length < 2) {
-            sendMessage(chatId, "❌ Неверный формат. Используйте: /remove [плейлист] [трек]");
+            sendMessage(chatId, "❌ Используйте: /remove [плейлист] [название трека]\n" +
+                    "Пример: /remove Мои любимые Bohemian Rhapsody");
             return;
         }
 
         String playlistName = params[0];
         String trackName = params[1];
 
-        List<IPlaylist> playlists = playlistService.getPlaylistByUserID(userId);
-        boolean exists = playlists.stream()
-                .anyMatch(p -> p.getName().equalsIgnoreCase(playlistName));
-
-        if (!exists) {
+        if (!playlistRepo.playlistExists(playlistName)) {
             sendMessage(chatId, "❌ Плейлист *" + playlistName + "* не существует");
+            return;
+        }
+
+        List<ITrack> playlistTracks = trackService.getPlaylistTracks(playlistName);
+        boolean trackInPlaylist = false;
+        for (ITrack track : playlistTracks) {
+            if (track.getTitle().equalsIgnoreCase(trackName)) {
+                trackInPlaylist = true;
+                break;
+            }
+        }
+
+        if (!trackInPlaylist) {
+            sendMessage(chatId, "❌ Трек *" + trackName + "* не найден в плейлисте *" + playlistName + "*\n\n" +
+                    "📋 Используйте /playlisttracks " + playlistName + " для просмотра треков");
             return;
         }
 
@@ -263,29 +284,55 @@ public class App extends TelegramLongPollingBot {
         }
     }
 
-    private String getWelcomeMessage() {
-        return "🎵 *Добро пожаловать в Music App Bot!*\n\n" +
-                "Я помогу вам управлять вашей музыкальной коллекцией.\n\n" +
-                "📌 *Основные команды:*\n" +
-                "/tracks - показать все треки\n" +
-                "/playlists - показать мои плейлисты\n" +
-                "/createplaylist - создать плейлист\n" +
-                "/deleteplaylist - удалить плейлист\n" +
-                "/playlisttracks - показать треки в плейлисте\n" +
-                "/add - добавить трек в плейлист\n" +
-                "/remove - удалить трек из плейлиста\n" +
-                "/help - помощь";
+    private void searchByArtist(long chatId, String args) {
+        if (args.trim().isEmpty()) {
+            sendMessage(chatId, "🔍 Используйте: /search [имя исполнителя]\n" +
+                    "Пример: /search Queen\n\n" +
+                    "Также можно искать по части имени:\n" +
+                    "/search Beat");
+            return;
+        }
+
+        String artistName = args.trim();
+        List<ITrack> tracks = trackService.searchTracksByArtist(artistName);
+
+        if (tracks.isEmpty()) {
+            sendMessage(chatId, "❌ Не найдено треков исполнителя *" + artistName + "*");
+            return;
+        }
+
+        StringBuilder message = new StringBuilder("🔍 *Результаты поиска по исполнителю \"" + artistName + "\":*\n\n");
+        for (int i = 0; i < tracks.size(); i++) {
+            ITrack track = tracks.get(i);
+            message.append(String.format("%d. *%s* - %s\n", i + 1, track.getTitle(), track.getArtist()));
+        }
+
+        sendMessage(chatId, message.toString());
     }
 
-    private String getHelpMessage() {
-        return "📚 *Помощь по командам:*\n\n" +
-                "*/tracks* - показать все доступные треки\n" +
+    private String getWelcomeMessage() {
+        return "*/tracks* - показать все доступные треки\n" +
+                "*/search [исполнитель]* - найти треки по исполнителю (только из библиотеки)\n" +
+                "   Пример: */search Queen*\n" +
                 "*/playlists* - показать все ваши плейлисты\n" +
                 "*/createplaylist [название]* - создать новый плейлист\n" +
                 "*/deleteplaylist [название]* - удалить плейлист\n" +
                 "*/playlisttracks [название]* - показать треки в плейлисте\n" +
                 "*/add [плейлист] [трек]* - добавить трек в плейлист\n" +
-                "   Пример: */add Рок-хиты Bohemian Rhapsody*\n" +
+                "*/remove [плейлист] [трек]* - удалить трек из плейлиста\n" +
+                "*/help* - показать эту справку";
+    }
+
+    private String getHelpMessage() {
+        return "📚 *Помощь по командам:*\n\n" +
+                "*/tracks* - показать все доступные треки\n" +
+                "*/search [исполнитель]* - найти треки по исполнителю (только из библиотеки)\n" +
+                "   Пример: */search Queen*\n" +
+                "*/playlists* - показать все ваши плейлисты\n" +
+                "*/createplaylist [название]* - создать новый плейлист\n" +
+                "*/deleteplaylist [название]* - удалить плейлист\n" +
+                "*/playlisttracks [название]* - показать треки в плейлисте\n" +
+                "*/add [плейлист] [трек]* - добавить трек в плейлист\n" +
                 "*/remove [плейлист] [трек]* - удалить трек из плейлиста\n" +
                 "*/help* - показать эту справку";
     }

@@ -42,19 +42,23 @@ public class TrackRepo implements ITrackRepo
     }
 
     public void addTrack(String playlistName, String trackName) {
+        System.out.println("🔍 addTrack вызван: playlist=" + playlistName + ", track=" + trackName);
+
         List<ITrack> allTracks = loadAllTracks();
         ITrack foundTrack = null;
 
         for (ITrack track : allTracks) {
             if (track.getTitle().equalsIgnoreCase(trackName)) {
                 foundTrack = track;
+                System.out.println("✅ Найден в библиотеке: " + track.getTitle());
                 break;
             }
         }
 
         if (foundTrack == null) {
-            System.out.println("Трек '" + trackName + "' не найден в базе");
-            return;
+            String trackId = "custom_" + System.currentTimeMillis();
+            foundTrack = new Track(trackId, trackName, "Пользовательский трек");
+            System.out.println("📝 Создан пользовательский трек: " + trackName);
         }
 
         List<ITrack> playlist = playlistToTrackDB.computeIfAbsent(
@@ -62,15 +66,16 @@ public class TrackRepo implements ITrackRepo
                 k -> new ArrayList<>()
         );
 
+        // Проверяем, нет ли уже такого трека в плейлисте
         for (ITrack existingTrack : playlist) {
             if (existingTrack.getTitle().equalsIgnoreCase(trackName)) {
-                System.out.println("Трек уже есть в плейлисте");
+                System.out.println("⚠️ Трек уже есть в плейлисте");
                 return;
             }
         }
 
         playlist.add(foundTrack);
-        System.out.println("Трек '" + trackName + "' добавлен в плейлист '" + playlistName + "'");
+        System.out.println("✅ Трек добавлен. Теперь в плейлисте " + playlist.size() + " треков");
     }
 
     public void removeTrack(String playlistName, String trackName) {
@@ -134,4 +139,18 @@ public class TrackRepo implements ITrackRepo
     public void removePlaylistFromTrackRepo(String playlistName) {
         playlistToTrackDB.remove(playlistName);
     }
+
+    public List<ITrack> searchTracksByArtist(String artistName) {
+        List<ITrack> allTracks = loadAllTracks();
+        List<ITrack> result = new ArrayList<>();
+
+        for (ITrack track : allTracks) {
+            if (track.getArtist().toLowerCase().contains(artistName.toLowerCase())) {
+                result.add(track);
+            }
+        }
+
+        return result;
+    }
+
 }

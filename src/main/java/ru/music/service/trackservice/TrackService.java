@@ -13,8 +13,11 @@ public class TrackService
         this.trackRepo = trackRepo;
     }
 
-    public void addTrackToPlaylist(String playlistName, String trackName)
-    {
+    public void addTrackToPlaylist(String playlistName, String trackName) {
+        if (trackName == null || trackName.trim().isEmpty()) {
+            System.out.println("❌ Название трека не может быть пустым");
+            return;
+        }
         trackRepo.addTrack(playlistName, trackName);
     }
 
@@ -43,5 +46,9 @@ public class TrackService
                     track.getArtist());
         }
         return tracks;
+    }
+
+    public List<ITrack> searchTracksByArtist(String artistName) {
+        return trackRepo.searchTracksByArtist(artistName);
     }
 }

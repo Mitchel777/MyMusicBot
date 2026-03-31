@@ -85,4 +85,9 @@ public class PlaylistRepo implements IPlaylistRepo
         }
         return playlists;
     }
+
+    public boolean playlistExists(String playlistName) {
+        return isPlaylistInPlaylistsDB(playlistName) != null;
+    }
+
 }
